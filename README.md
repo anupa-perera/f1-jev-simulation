@@ -214,12 +214,14 @@ The interface is a React application in `ui/`, built with Vite and using [shadcn
 
 Vite emits one self-contained HTML file. `src/dashboard.js` serves that same file for both modes and only changes what it injects at the `<!--f1:data-->` marker: the live client receives the configured model defaults and fetches `GET /api/runs`, while the exported report receives the run data inline and never calls the server. Injected values are escaped so that a driver or race name coming from remote data cannot terminate the script block.
 
-The build runs automatically before `npm test`, `npm run dashboard`, and `npm run dashboard:export`. Build it directly, or start Vite with hot reload against a dashboard already running on 4317:
+The build runs automatically before `npm test`, `npm run dashboard`, and `npm run dashboard:export`. Build it directly, or start Vite with hot reload:
 
 ```powershell
 npm run ui:build
 npm run ui:dev
 ```
+
+`ui:dev` serves the UI on 5173 and proxies `/api` to the dashboard server on 4317, which it starts as a child process and stops again when Vite exits, so hot reload needs one command rather than two terminals. A dashboard already listening on that port is detected and left running, so `npm run dashboard` in a separate terminal still behaves as before. `F1_JEV_PORT` moves the proxy and the spawned server together. The dev server is the only mode that starts anything: `npm run ui:build` never does.
 
 Theme tokens live in `ui/src/index.css`, which maps the Netflix (Hawkins) palette onto shadcn's semantic variables.
 

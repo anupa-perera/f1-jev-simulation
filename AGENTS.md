@@ -21,6 +21,7 @@ This is an evaluation and research tool. Never describe unvalidated probabilitie
 - `src/store.js` owns cache and run storage outside this repository.
 - `src/server.js` owns the loopback HTTP API, one-active-run policy, and Server-Sent Event delivery.
 - `ui/` owns the React interface, built by Vite into one self-contained HTML file using shadcn/ui components on Tailwind. Components under `ui/src/components/ui/` are vendored shadcn source and may be edited.
+- `vite.config.ts` owns the dev server only. It proxies `/api` to the dashboard server and, in `serve` mode alone, starts that server as a child process when the port is free so hot reload needs one command. A build must never spawn it.
 - `src/dashboard.js` owns that bundle's data injection. It serves the same artifact to the live client and the standalone saved-run report, and escapes injected values so untrusted names cannot terminate the script block.
 - `src/cli.js` performs orchestration only.
 
