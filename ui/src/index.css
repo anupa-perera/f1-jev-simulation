@@ -1,0 +1,178 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Netflix Sans is licensed and cannot be redistributed, so it is never bundled.
+   `local()` picks up a system install; the /fonts URL picks up self-hosted files
+   dropped into ui/public/fonts. Either miss falls through to the same Helvetica
+   Neue stack netflix.com uses, and neither miss can fail the build. */
+@font-face {
+  font-family: "Netflix Sans";
+  src: local("Netflix Sans"), url("/fonts/NetflixSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Netflix Sans";
+  src: local("Netflix Sans Medium"), local("Netflix Sans"), url("/fonts/NetflixSans-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Netflix Sans";
+  src: local("Netflix Sans Bold"), local("Netflix Sans"), url("/fonts/NetflixSans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Netflix Sans";
+  src: local("Netflix Sans Black"), local("Netflix Sans"), url("/fonts/NetflixSans-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+
+/* Inter is the self-hosted fallback, sitting between Netflix Sans and the
+   system stack. Netflix Sans is bespoke and unlicensable, and on Windows there
+   is no Helvetica Neue either, so without this the page renders in Arial.
+   Inter is SIL OFL, so unlike Netflix Sans it may actually be redistributed.
+   It lives under src/ rather than public/ so Vite inlines it into the bundle,
+   which is what makes the exported single-file report render correctly offline.
+   The licence travels with it in ui/src/fonts/Inter-LICENSE.txt. */
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter-900.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+
+/* The bench is dark-only, matching the Netflix (Hawkins) surface ramp. `.dark`
+   is aliased to the same values so shadcn components that key off it behave. */
+:root,
+.dark {
+  color-scheme: dark;
+
+  --nf-red: #e50914;
+  --nf-red-dark: #b20710;
+  --nf-green: #46d369;
+
+  --radius: 0.25rem;
+  --background: #141414;
+  --foreground: #ffffff;
+  --card: #181818;
+  --card-foreground: #ffffff;
+  --popover: #1f1f1f;
+  --popover-foreground: #ffffff;
+  --primary: #e50914;
+  --primary-foreground: #ffffff;
+  --secondary: #2f2f2f;
+  --secondary-foreground: #ffffff;
+  --muted: #2f2f2f;
+  --muted-foreground: #b3b3b3;
+  --accent: #2f2f2f;
+  --accent-foreground: #ffffff;
+  --destructive: #e50914;
+  --destructive-foreground: #ffffff;
+  --border: #333333;
+  --input: #333333;
+  --ring: #e50914;
+
+  --subtle: #808080;
+  --chart-1: #e50914;
+  --chart-2: #3987e5;
+  --chart-3: #22a06b;
+  --chart-4: #b58a2a;
+  --chart-5: #8b5cf6;
+}
+
+@theme inline {
+  --font-sans: "Netflix Sans", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-subtle: var(--subtle);
+  --color-nf-red: var(--nf-red);
+  --color-nf-red-dark: var(--nf-red-dark);
+  --color-nf-green: var(--nf-green);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  /* The bench is read at arm's length while a run streams, so the base scale
+     is a notch above browser default and steps up again on wide screens. */
+  html {
+    font-size: 17px;
+  }
+  @media (min-width: 1280px) {
+    html {
+      font-size: 18px;
+    }
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-synthesis-weight: none;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-black tracking-[-0.01em];
+  }
+  /* Every number in this UI is compared column-wise, so lock the digit width. */
+  table,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* One shared label treatment: the uppercase micro-caption above stats, legends
+   and table headers. Repeated often enough across components to earn a class. */
+@utility label-caption {
+  @apply text-[0.7rem] font-bold uppercase tracking-[0.08em] text-subtle;
+}
